@@ -1,0 +1,17 @@
+# Core ML
+torch>=2.3              # PyPI ships CUDA-enabled wheels by default on Linux/Windows
+open_clip_torch>=2.24   # CLIP ViT-L/14; pulls in torchvision, ftfy, regex automatically
+scikit-learn>=1.4       # linear probe (pulls in joblib)
+
+# Dataset streaming
+datasets>=2.19          # streaming=True support
+pyarrow>=14.0           # Parquet backend used by HF streaming
+
+# Utilities
+numpy>=1.26
+Pillow>=10.0
+tqdm>=4.66
+
+# Note: if `python -c "import torch; print(torch.cuda.is_available())"` prints False,
+# reinstall torch from the PyTorch CUDA index instead:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu121

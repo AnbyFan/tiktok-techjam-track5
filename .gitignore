@@ -1,0 +1,47 @@
+# Data (downloaded via fetch_data.py or provided by organizers)
+data/
+
+# Feature caches (generated via extract_features*.py)
+features/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Outputs
+predictions*.json
+
+# Logs
+*.log
+*.err
+
+# Temp files
+*.tmp
+*.temp
+*.flag
+
+# Batch scripts (Windows-specific)
+*.bat
+*.ps1
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+"DEMO_VIDEO_SCRIPT.md"  
+"AGENTS.md"  
+"PROGRESS_REPORT.md"  
