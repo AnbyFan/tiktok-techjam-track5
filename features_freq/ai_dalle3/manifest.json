@@ -1,0 +1,10 @@
+{
+  "shards": [
+    "features_00000.npy"
+  ],
+  "n_images": 500,
+  "feature_dim": 72,
+  "input_dir": "data/wildfake/Images/Diffusion_based/DALLE/DALLE/Advanced/DALLE3",
+  "n_freq_bins": 64,
+  "n_phase_stats": 8
+}

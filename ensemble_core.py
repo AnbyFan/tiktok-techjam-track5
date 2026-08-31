@@ -26,8 +26,11 @@ import json
 from pathlib import Path
 
 import joblib
+import numpy as np
 import torch
 import open_clip
+
+from drift import add_drift_features
 
 
 class EnsembleScorer:
@@ -40,6 +43,14 @@ class EnsembleScorer:
         self.pretrained = cfg.get("pretrained", "openai")
         self.threshold = float(cfg.get("threshold", 0.5))
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+
+        # Optional feature-drift augmentation (RIGID-style). When enabled,
+        # encode() appends [drift_mean, drift_std] to the 768-d features so
+        # probes trained on 770-d features can use the perturbation signal.
+        self.drift = bool(cfg.get("drift", False))
+        self.drift_k = int(cfg.get("drift_k", 4))
+        self.drift_sigma = float(cfg.get("drift_sigma", 0.2))
+        self.drift_seed = int(cfg.get("drift_seed", 42))
 
         # Shared backbone (one forward pass serves all members).
         self.model, _, self.preprocess = open_clip.create_model_and_transforms(
@@ -64,13 +75,23 @@ class EnsembleScorer:
         self.weights = [w / total for w in raw_weights]
 
     def encode(self, tensors):
-        """Run the shared backbone once; return L2-normalized float features."""
+        """Run the shared backbone once; return L2-normalized float features.
+
+        When drift is enabled, appends [drift_mean, drift_std] computed from K
+        noisy re-encodes, yielding 770-d features.
+        """
         with torch.inference_mode(), torch.autocast(
                 "cuda", dtype=torch.float16, enabled=(self.device == "cuda")):
             t = tensors.to(self.device, non_blocking=True)
             f = self.model.encode_image(t)
             f = f / f.norm(dim=-1, keepdim=True)
-        return f.float().cpu().numpy()
+        f_clean = f.float().cpu().numpy()
+        if not self.drift:
+            return f_clean
+        rng = np.random.default_rng(self.drift_seed)
+        return add_drift_features(
+            self.model, f_clean, tensors, self.drift_k, self.drift_sigma,
+            self.device, rng=rng)
 
     def score(self, features):
         """Weighted average of each probe's P(AI) over precomputed features."""

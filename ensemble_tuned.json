@@ -1,0 +1,39 @@
+{
+  "model": "ViT-L-14",
+  "pretrained": "openai",
+  "threshold": 0.5,
+  "members": [
+    {
+      "probe": "probe_v11_all_w45",
+      "weight": 0.125
+    },
+    {
+      "probe": "probe_v11_all_w40",
+      "weight": 0.125
+    },
+    {
+      "probe": "probe_v11_all_w50",
+      "weight": 0.125
+    },
+    {
+      "probe": "probe_v12_all_sana_w45",
+      "weight": 0.125
+    },
+    {
+      "probe": "probe_v13_all_midjourney_w45",
+      "weight": 0.125
+    },
+    {
+      "probe": "probe_v16_sd3_only_w45",
+      "weight": 0.125
+    },
+    {
+      "probe": "probe_v17_midjourney_only_w45",
+      "weight": 0.125
+    },
+    {
+      "probe": "probe_v18_sana_only_w45",
+      "weight": 0.125
+    }
+  ]
+}

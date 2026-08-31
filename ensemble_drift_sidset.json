@@ -1,0 +1,12 @@
+{
+  "model": "ViT-L-14",
+  "pretrained": "openai",
+  "threshold": 0.5,
+  "drift": true,
+  "drift_k": 4,
+  "drift_sigma": 0.05,
+  "drift_seed": 42,
+  "members": [
+    {"probe": "probe_drift_sidset", "weight": 1.0}
+  ]
+}

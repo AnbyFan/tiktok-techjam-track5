@@ -1,0 +1,13 @@
+{
+  "feature_dirs": [
+    "features/sid_set_aug",
+    "features/comfy_aug5"
+  ],
+  "feature_dim": 768,
+  "real_label": 0,
+  "ai_label": 1,
+  "threshold": 0.5,
+  "C": 1.0,
+  "ai_weight": 2.0,
+  "seed": 42
+}

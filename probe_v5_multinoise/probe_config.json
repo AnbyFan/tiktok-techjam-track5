@@ -1,0 +1,19 @@
+{
+  "feature_dirs": [
+    "features/sid_set",
+    "features/comfy_aug"
+  ],
+  "feature_dim": 768,
+  "model_type": "logistic_regression_multinoise",
+  "noise_levels": [
+    0.03,
+    0.06,
+    0.1
+  ],
+  "real_label": 0,
+  "ai_label": 1,
+  "threshold": 0.5,
+  "C": 1.0,
+  "seed": 42,
+  "test_acc_at_threshold": 0.9848852901484481
+}

@@ -1,0 +1,12 @@
+{
+  "feature_dirs": [
+    "features/sid_set_aug"
+  ],
+  "feature_dim": 768,
+  "real_label": 0,
+  "ai_label": 1,
+  "threshold": 0.5,
+  "C": 0.5,
+  "ai_weight": 1.5,
+  "seed": 42
+}
