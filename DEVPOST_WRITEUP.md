@@ -49,7 +49,7 @@ Combining three independent AI image sources (SID_Set, ComfyUI, Flux) with highe
 
 ### Training Data
 - **SID_Set** (Hugging Face): 8,000 images (4,000 real + 4,000 AI)
-  - Real: Natural images from COCO, ImageNet
+  - Real: Natural images from OpenImages V7
   - AI: Diffusion model outputs (Stable Diffusion, Midjourney, DALL·E)
 - **ComfyUI** (own generator): 8,000 AI images (5 augmented copies each = 40,000 features)
 - **Flux_AIGC_Dataset** (Hugging Face): 3,000 AI images (Flux 1 Schnell outputs)
