@@ -11,6 +11,7 @@ pyarrow>=14.0           # Parquet backend used by HF streaming
 numpy>=1.26
 Pillow>=10.0
 tqdm>=4.66
+requests>=2.31          # Telegram bot
 
 # Note: if `python -c "import torch; print(torch.cuda.is_available())"` prints False,
 # reinstall torch from the PyTorch CUDA index instead:
