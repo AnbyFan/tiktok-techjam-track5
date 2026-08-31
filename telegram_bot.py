@@ -23,8 +23,19 @@ from ensemble_core import EnsembleScorer
 from PIL import Image
 import io
 
+# Load .env file if it exists
+def load_env():
+    env_file = Path(__file__).parent / ".env"
+    if env_file.exists():
+        for line in env_file.read_text().splitlines():
+            if line and not line.startswith("#") and "=" in line:
+                key, _, value = line.partition("=")
+                os.environ[key.strip()] = value.strip()
+
+load_env()
+
 # Configuration
-BOT_TOKEN = os.getenv("BOT_TOKEN", "YOUR_BOT_TOKEN_HERE")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 API_BASE = f"https://api.telegram.org/bot{BOT_TOKEN}"
 
 
@@ -112,8 +123,10 @@ def main():
 
 
 if __name__ == "__main__":
-    if BOT_TOKEN == "YOUR_BOT_TOKEN_HERE":
-        print("Error: Set BOT_TOKEN environment variable or edit the script.")
+    if not BOT_TOKEN:
+        print("Error: BOT_TOKEN not found.")
+        print("Create a .env file from .env.example and add your token:")
+        print("  BOT_TOKEN=your_token_here")
         print("Get a token from @BotFather on Telegram.")
         sys.exit(1)
     main()
