@@ -102,7 +102,7 @@ def main():
 
                 # Handle new messages with photos
                 if "message" in update and "photo" in update["message"]:
-                    chat_id = update["message"]["chat_id"]
+                    chat_id = update["message"]["chat"]["id"]
                     # Get the largest photo
                     photos = update["message"]["photo"]
                     file_id = photos[-1]["file_id"]
