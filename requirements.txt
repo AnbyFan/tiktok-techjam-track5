@@ -1,7 +1,7 @@
 # Core ML
 torch>=2.3              # PyPI ships CUDA-enabled wheels by default on Linux/Windows
 open_clip_torch>=2.24   # CLIP ViT-L/14; pulls in torchvision, ftfy, regex automatically
-scikit-learn==1.5.2     # linear probe (pinned for probe compatibility)
+scikit-learn==1.9.0     # linear probe (pinned for probe compatibility)
 
 # Dataset streaming
 datasets>=2.19          # streaming=True support
