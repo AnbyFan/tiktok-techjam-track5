@@ -1,5 +1,7 @@
 # AI Image Detection — TikTok TechJam 2026 Track 5
 
+**Team:** 三T
+
 A robust AI-vs-real image classifier that maintains high accuracy across 15 real-world transforms with a frozen decision threshold.
 
 ## Overview
@@ -124,6 +126,23 @@ python telegram_bot.py
 3. **Transform augmentation is critical**: Image-level augmentation during training dramatically improves robustness
 4. **Pure single-generator probes diversify ensembles**: Training probes on ONE generator's data adds far more diversity than correlated superset probes
 5. **Ensemble saturation**: Adding a 9th AI-focused probe (pure-Flux) hurt noise robustness — 8 members is optimal
+
+## Challenges We Faced
+
+### Calibration vs. Discrimination
+Training on SID_Set alone gave excellent AUROC (0.983) but poor accuracy (0.891) at the frozen t=0.5 threshold. The model ranked images correctly but pushed AI probabilities too low. **Solution**: Class weighting to shift the decision boundary.
+
+### Superset Probes Hurt Ensembles
+Adding a 6th probe trained on (all generators + SD3) made the ensemble **worse** (97.18% vs 97.39%). The superset probe was highly correlated with existing members — it didn't add diversity. **Lesson**: Ensembles need diverse members, not just more members.
+
+### Feature Drift Doesn't Transfer
+We hypothesized AI images show larger embedding drift under perturbations. The drift probe (0.8920 clean, 0.6760 worst) was worse than baseline and got **worse under noise**. **Lesson**: CLIP's drift isn't stable enough to use as a feature.
+
+### Noise Augmentation Skews Class Balance
+Retraining with noise-augmented features (each image + 4 noise levels) made the ensemble **worse** (96.90% vs 98.60%). Adding 68k AI noise features skewed class balance toward AI. **Lesson**: More data isn't always better.
+
+### Ensemble Saturation
+Adding a 9th probe (pure-Flux) made the ensemble **worse** (98.04% vs 98.60%). One more AI-focused probe tipped the balance toward over-flagging noise as AI. **Lesson**: 8 members is optimal.
 
 ## License
 
