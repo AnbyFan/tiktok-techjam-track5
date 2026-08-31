@@ -13,6 +13,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, roc_auc_score
 from tqdm import tqdm
 
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent / 'extract'))
 from extract_freq_features import extract_features_for_image
 
 EXTS = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
