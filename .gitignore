@@ -22,6 +22,8 @@ env/
 
 # Outputs
 predictions*.json
+demo_predictions.json
+demo_samples/
 
 # Logs
 *.log
