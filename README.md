@@ -90,6 +90,10 @@ python scan_image.py path/to/image.jpg
 python telegram_bot.py
 ```
 
+### Demo Video
+
+See `docs/DEMO_VIDEO_SCRIPT.md` for the full demo video script with scene-by-scene breakdown.
+
 ## Project Structure
 
 ```

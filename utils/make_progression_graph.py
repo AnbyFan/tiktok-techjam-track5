@@ -19,6 +19,8 @@ VERSIONS = [
     ("v9", "dalle3_v9_strat_w15_nonoise", "Stratified aug"),
     ("v10", "dalle3_v10_combo5_w35_nonoise", "Combo5 + w3.5"),
     ("v11", "dalle3_v11_all_w45_nonoise", "All features + w4.5"),
+    ("5-ens", "dalle3_ensemble", "5-member ensemble"),
+    ("8-ens", "dalle3_ensemble_8m", "8-member ensemble"),
 ]
 
 
