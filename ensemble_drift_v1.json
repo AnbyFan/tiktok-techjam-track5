@@ -7,6 +7,6 @@
   "drift_sigma": 0.2,
   "drift_seed": 42,
   "members": [
-    {"probe": "probe_drift_v1", "weight": 1.0}
+    {"probe": "probes/probe_drift_v1", "weight": 1.0}
   ]
 }

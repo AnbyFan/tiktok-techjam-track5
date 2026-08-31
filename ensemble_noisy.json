@@ -3,6 +3,6 @@
   "pretrained": "openai",
   "threshold": 0.5,
   "members": [
-    {"probe": "probe_noisy_v1", "weight": 1.0}
+    {"probe": "probes/probe_noisy_v1", "weight": 1.0}
   ]
 }

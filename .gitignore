@@ -42,6 +42,16 @@ predictions*.json
 # OS
 .DS_Store
 Thumbs.db
-"DEMO_VIDEO_SCRIPT.md"  
-"AGENTS.md"  
-"PROGRESS_REPORT.md"  
+"DEMO_VIDEO_SCRIPT.md"
+"AGENTS.md"
+"PROGRESS_REPORT.md"
+
+# Working docs (not for the submission repo)
+ERROR_ANALYSIS.md
+EXPERIMENTS_ROBUSTNESS.md
+HANDOFF.md
+JOURNAL.md
+
+# Python cache
+__pycache__/
+*.pyc
