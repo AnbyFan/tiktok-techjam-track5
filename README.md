@@ -75,37 +75,36 @@ pip install -r requirements.txt
 ### Quick Start
 
 ```bash
-# 1. Extract features (if not already done)
-python extract_features_aug.py --out features/sid_set_aug --per-class 4000 --aug-copies 3
-
-# 2. Train a probe (one of 8 ensemble members)
-python train_probe_cw.py --features features/sid_set_aug features/comfy_aug5 --out probe_v11_all_w45 --ai-weight 4.5
-
-# 3. Evaluate the full ensemble robustness
-python eval_robustness_ensemble.py --real-dir data/val/real --ai-dir "data/wildfake/Images/Diffusion_based/DALLE/DALLE/Advanced/DALLE3" --config ensemble_config.json --out reports/dalle3_ensemble_8m --max-per-class 500
+# Scan a single image
+python scan_image.py path/to/image.jpg
 ```
 
-### Predict on New Images
+### Run the Telegram Bot
 
 ```bash
-python predict_ensemble.py --config ensemble_config.json --image path/to/image.jpg
+# 1. Get a bot token from @BotFather on Telegram
+# 2. Copy .env.example to .env and add your token
+# 3. Run the bot
+python telegram_bot.py
 ```
 
 ## Project Structure
 
 ```
-├── data/                    # Datasets (real + AI images)
-├── features/                # Extracted CLIP features
 ├── ensemble_config.json     # Ensemble member config (8 members)
-├── probe_v11_all_w45/       # Ensemble member probes (8 total dirs)
-├── reports/dalle3_ensemble_8m/ # Final evaluation report
-├── eval_robustness_ensemble.py # Ensemble robustness evaluation harness
-├── predict_ensemble.py      # Ensemble single-image prediction
+├── probes/                  # Ensemble member probes (8+ dirs)
+├── reports/                 # Evaluation reports
+├── features_freq/           # Frequency-domain features
+├── extract/                 # Feature extraction scripts
+├── train/                   # Training scripts
+├── eval/                    # Evaluation scripts
+├── utils/                   # Utility scripts
+├── ensemble_core.py         # Core ensemble loading/scoring
+├── predict_ensemble.py      # Batch prediction script
+├── scan_image.py            # Single-image scan script
+├── telegram_bot.py          # Telegram bot integration
 ├── train_probe_cw.py        # Class-weighted probe trainer
-├── extract_features_aug.py  # Feature extraction with augmentation
-├── extract_midjourney.py    # AI-only feature extractor (any generator)
-├── _count_params.py         # Parameter count vs 2B limit
-└── JOURNAL.md               # Iteration history and findings
+└── fetch_data.py            # Dataset downloader
 ```
 
 ## Parameter Budget
