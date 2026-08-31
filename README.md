@@ -114,6 +114,10 @@ python predict_ensemble.py --config ensemble_config.json --image path/to/image.j
 - 8 logistic regression probes: 6,152 params
 - **Total: 303,972,360 (15.2% of the 2B limit)**
 
+## Limitations
+
+- **Resolution**: The system is optimized for lower-resolution images due to time and storage constraints during feature extraction and training. Performance on very high-resolution images may vary.
+
 ## Key Findings
 
 1. **CIFAKE dilutes signal**: 32×32 CIFAKE images hurt performance at natural resolution
