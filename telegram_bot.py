@@ -4,7 +4,7 @@ Simple Telegram bot for AI image detection.
 
 Usage:
     1. Get a bot token from @BotFather on Telegram
-    2. Set the BOT_TOKEN environment variable or edit below
+    2. Create .env file with BOT_TOKEN
     3. Run: python telegram_bot.py
 
 Send an image to the bot and it will respond with "AI" or "REAL".
@@ -13,8 +13,16 @@ Send an image to the bot and it will respond with "AI" or "REAL".
 import os
 import sys
 import time
-import requests
+import subprocess
 from pathlib import Path
+
+# Auto-activate venv if not already active
+VENV_PYTHON = Path(__file__).parent / ".venv" / "Scripts" / "python.exe"
+if VENV_PYTHON.exists() and Path(sys.executable).resolve() != VENV_PYTHON.resolve():
+    print(f"Using venv: {VENV_PYTHON}")
+    os.execv(str(VENV_PYTHON), [str(VENV_PYTHON)] + sys.argv)
+
+import requests
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent))
