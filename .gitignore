@@ -47,11 +47,7 @@ Thumbs.db
 "PROGRESS_REPORT.md"
 
 # Working docs (not for the submission repo)
-DEVPOST_WRITEUP.md
-ERROR_ANALYSIS.md
-EXPERIMENTS_ROBUSTNESS.md
-HANDOFF.md
-JOURNAL.md
+docs/
 
 # Python cache
 __pycache__/
