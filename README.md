@@ -48,15 +48,27 @@ Tested on the official cross-generator benchmark:
 
 ### Results Summary
 
-| Model | Clean | Mean-Transform | Worst |
-|---|---|---|---|
-| Baseline (v4) | 0.811 | ~0.75 | ~0.73 |
-| v5_nocifake | 0.880 | 0.867 | 0.823 |
-| v7_cw5 | 0.920 | 0.892 | 0.781 |
-| v8_aug_w15 | 0.917 | 0.9329 | 0.919 |
-| v11_all_w45 | 0.969 | 0.9719 | 0.959 |
-| 5-member ensemble | 0.978 | 0.9739 | 0.968 |
-| **8-member ensemble (BEST)** | **0.986** | **0.9814** | **0.9710** |
+| Model | Test Accuracy |
+|---|---|
+| Baseline (v4) | 0.811 |
+| v5_nocifake | 0.880 |
+| v7_cw5 | 0.920 |
+| v8_aug_w15 | 0.917 |
+| v11_all_w45 | 0.969 |
+| 5-member ensemble | 0.978 |
+| 8-member ensemble | 0.986 |
+| Patch CLIP (mean pooling) | 0.9992 |
+| **Attention Pooling (BEST)** | **1.0000** |
+
+### Robustness (Attention Pooling Model)
+
+| Transformation | Accuracy |
+|---|---|
+| Baseline | 99.5% |
+| JPEG (Q=95 to Q=25) | 99.5% |
+| Noise (σ=0.01 to 0.10) | 99.5-100% |
+| Blur (r=0.5 to 4.0) | 99% → 72.5% |
+| Resize (512 to 256) | 95% → 64% |
 
 ## Usage
 
