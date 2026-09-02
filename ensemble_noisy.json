@@ -1,8 +1,0 @@
-{
-  "model": "ViT-L-14",
-  "pretrained": "openai",
-  "threshold": 0.5,
-  "members": [
-    {"probe": "probes/probe_noisy_v1", "weight": 1.0}
-  ]
-}

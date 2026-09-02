@@ -3,6 +3,13 @@ data/
 
 # Feature caches (generated via extract_features*.py)
 features/
+features_freq/
+extract/
+probes/
+reports/
+
+# Config files (generated)
+configs/
 
 # Python
 __pycache__/
@@ -21,11 +28,13 @@ env/
 .env
 
 # Outputs
+outputs/
 predictions*.json
 demo_predictions.json
 demo_samples/
 
 # Logs
+logs/
 *.log
 *.err
 
@@ -35,8 +44,8 @@ demo_samples/
 *.flag
 
 # Batch scripts (Windows-specific)
-*.bat
-*.ps1
+bat/
+ps1/
 
 # IDE
 .vscode/
