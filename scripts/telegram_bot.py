@@ -29,12 +29,13 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 # Load .env file if it exists
 def load_env():
-    env_file = Path(__file__).parent / ".env"
-    if env_file.exists():
-        for line in env_file.read_text().splitlines():
-            if line and not line.startswith("#") and "=" in line:
-                key, _, value = line.partition("=")
-                os.environ[key.strip()] = value.strip()
+    for candidate in (Path(__file__).parent / ".env", Path(__file__).parent.parent / ".env"):
+        if candidate.exists():
+            for line in candidate.read_text().splitlines():
+                if line and not line.startswith("#") and "=" in line:
+                    key, _, value = line.partition("=")
+                    os.environ[key.strip()] = value.strip()
+            break
 
 load_env()
 
@@ -148,7 +149,8 @@ def main():
     clip_model.eval()
 
     # Load attention pooling model
-    model_state = joblib.load("model_attention_pooling.joblib")
+    model_path = Path(__file__).parent.parent / "models" / "model_attention_pooling_phone.joblib"
+    model_state = joblib.load(model_path)
     dim = model_state['dim']
     n_heads = model_state['n_heads']
 

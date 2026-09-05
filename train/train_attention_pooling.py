@@ -20,7 +20,10 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 
 REAL_DIR = Path("data/val/real")
+PHONE_DIR = Path("data/hdrplus_real")  # real phone photos (Google HDR+) to cut iPhone false positives
 AI_DIR = Path("data/wildfake/Images/Diffusion_based/DALLE/DALLE/Advanced/DALLE3")
+PHONE_EVAL_HOLDOUT = 30  # phone photos held out of training to measure FP rate
+OUTPUT_MODEL = str(Path(__file__).parent.parent / "models" / "model_attention_pooling_phone.joblib")
 
 
 class AttentionPooling(nn.Module):
@@ -76,22 +79,44 @@ def main():
 
     # Get all images
     real_paths = sorted(REAL_DIR.glob("*.jpg"))
+    phone_paths = sorted(PHONE_DIR.glob("*.jpg")) if PHONE_DIR.exists() else []
     ai_paths = sorted(AI_DIR.rglob("*.jpg"))
-    print(f"    Real: {len(real_paths)}")
+
+    # Hold out some phone photos for FP evaluation; add the rest to the real class
+    phone_eval_paths = phone_paths[:PHONE_EVAL_HOLDOUT]
+    phone_train_paths = phone_paths[PHONE_EVAL_HOLDOUT:]
+    real_paths = real_paths + phone_train_paths
+
+    print(f"    Real (COCO): {len(real_paths) - len(phone_train_paths)}")
+    print(f"    Real (phone, train): {len(phone_train_paths)}")
+    print(f"    Real (phone, eval holdout): {len(phone_eval_paths)}")
     print(f"    AI: {len(ai_paths)}")
 
     # Extract features for all images
     print(f"\n[2] Extracting patch features...")
+    # Load cached features (run train/extract_features_cache.py first if missing)
+    cache_file = Path("data/features_cache.npz")
+    if not cache_file.exists():
+        print(f"\nERROR: Feature cache not found at {cache_file}")
+        print("Run: python train/extract_features_cache.py  (takes ~2 hours, one-time)")
+        sys.exit(1)
+
+    print(f"\n[2] Loading cached features from {cache_file}...")
+    cache = np.load(cache_file, allow_pickle=True)
+    feat_by_path = {p: f for p, f in zip(cache["paths"], cache["features"])}
+
+    # Split cached features by source
     all_features = []
     all_labels = []
-
-    for i, path in enumerate(real_paths + ai_paths):
-        if (i + 1) % 500 == 0:
-            print(f"    {i+1}/{len(real_paths) + len(ai_paths)}")
-        img = Image.open(path).convert("RGB")
-        feats = extract_patch_features(model, preprocess, img, device)
-        all_features.append(feats)
-        all_labels.append(0 if i < len(real_paths) else 1)
+    phone_eval_feats = []
+    for path in real_paths:  # COCO + phone_train (label 0)
+        all_features.append(feat_by_path[str(path)])
+        all_labels.append(0)
+    for path in phone_eval_paths:  # held-out phone (label 0, eval only)
+        phone_eval_feats.append(feat_by_path[str(path)])
+    for path in ai_paths:  # AI (label 1)
+        all_features.append(feat_by_path[str(path)])
+        all_labels.append(1)
 
     # Split into train/test
     X_train, X_test, y_train, y_test = train_test_split(
@@ -175,6 +200,23 @@ def main():
     test_acc = accuracy_score(y_test, preds_test)
     print(f"    Test Accuracy: {test_acc:.4f}")
 
+    # Evaluate on held-out phone photos (all REAL; any prob>=0.5 is a false positive)
+    phone_fp = None
+    if phone_eval_feats:
+        print(f"\n[5b] Evaluating on {len(phone_eval_feats)} held-out phone photos...")
+        phone_probs = []
+        for feats in phone_eval_feats:
+            feats_t = torch.tensor(feats, dtype=torch.float32).unsqueeze(0).to(device)
+            with torch.inference_mode():
+                pooled = attn_pool(feats_t)
+                logits = classifier(pooled)
+                prob = torch.sigmoid(logits).item()
+            phone_probs.append(prob)
+        n_fp = sum(1 for p in phone_probs if p >= 0.5)
+        phone_fp = n_fp / len(phone_probs)
+        print(f"    Phone FP rate: {n_fp}/{len(phone_probs)} ({phone_fp*100:.1f}%)")
+        print(f"    Mean phone AI-prob: {np.mean(phone_probs):.4f}")
+
     # Save model
     print(f"\n[6] Saving model...")
     model_state = {
@@ -183,12 +225,14 @@ def main():
         'dim': dim,
         'n_heads': 4
     }
-    joblib.dump(model_state, "model_attention_pooling.joblib")
-    print(f"    Saved to model_attention_pooling.joblib")
+    joblib.dump(model_state, OUTPUT_MODEL)
+    print(f"    Saved to {OUTPUT_MODEL}")
 
     print(f"\n{'='*60}")
     print("ATTENTION POOLING MODEL TRAINED!")
     print(f"Test Accuracy: {test_acc:.4f}")
+    if phone_fp is not None:
+        print(f"Held-out Phone FP rate: {phone_fp*100:.1f}%")
     print(f"{'='*60}")
 
 
